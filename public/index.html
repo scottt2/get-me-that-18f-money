@@ -72,8 +72,6 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     var socket  = io();
-    var refresh = 10 * 1000;
-    var countdown, counter;
     var ui = {
       'body': document.body,
       'info': document.getElementById('info'),
@@ -102,7 +100,7 @@
       updateInfo(msg.payload);
     });
 
-    socket.on('status', function(msg) {
+    socket.on('error', function(msg) {
       updateError(msg.payload);
     });
 
