@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>18fer</title>
+<style>
+  body {
+    background-color: #f3f3f3;
+    color: #222;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 300;
+  }
+  a {
+    color: rgba(255,255,255,.7);
+    text-decoration: none;
+  }
+  a:hover {
+    color: white;
+    text-decoration: underline;
+  }
+  .winning, .losing {
+    color: white;
+  }
+  .winning {
+    background-color: green;
+  }
+  .losing {
+    background-color: red;
+  }
+  #connection {
+    margin: 10px auto;
+    text-align: center;
+    width: 100px;
+  }
+  #info {
+    width: 400px;
+    height: 100px;
+
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+    text-align: center;
+  }
+
+  h1 {
+    -webkit-animation-name: pulse;
+    -webkit-animation-duration: 400ms;
+    -webkit-animation-iteration-count: once;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-delay: 0ms;
+  }
+  @-webkit-keyframes pulse {
+      0% { font-size: 2em; }
+      50% { font-size: 2.5em; }
+      100% { font-size: 2em; }
+  }
+
+</style>
+</head>
+
+<body>
+  <div id="connection">
+    <div id="status">Connecting...</div>
+    <div id="refresh"></div>
+  </div>
+  <div id="info">
+    <h1>Loading...</h1>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket  = io();
+    var refresh = 10 * 1000;
+    var countdown, counter;
+    var ui = {
+      'body': document.body,
+      'info': document.getElementById('info'),
+      'status': document.getElementById('status'),
+      'refresh': document.getElementById('refresh')
+    };
+
+    function infoTemplate(auction) {
+      return '<h1>$' + auction.winning_bid.amount + '</h1>' +
+             '<a target="_blank" href="https://micropurchase.18f.gov/auctions/' + auction.id +'">'  +
+               auction.title +
+             '</a>';
+    }
+
+    function updateInfo(data) {
+      ui.info.innerHTML    = infoTemplate(data.auction);
+      ui.status.innerHTML  = 'Connected';
+      ui.body.classList    = (data.winning) ? 'winning' : 'losing';
+    }
+
+    function updateError(error) {
+      console.log(error.error);
+    }
+
+    socket.on('status', function(msg) {
+      updateInfo(msg.payload);
+    });
+
+    socket.on('status', function(msg) {
+      updateError(msg.payload);
+    });
+
+    socket.on('tick', function(time){
+      ui.refresh.innerHTML = time;
+    });
+  </script>
+</body>
+
+</html>
