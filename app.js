@@ -11,7 +11,7 @@ var notToExceed = 500;
 
 var auctionID = 24; // Set this;
 var userID    = 173; // Set this;
-var authToken = '542364db3aac38f89c68f6034861e0d62d6c3910';
+var authToken = YOUR AUTH TOKEN HERE;
 
 app.use(express.static('public'));
 
