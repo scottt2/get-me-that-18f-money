@@ -80,7 +80,7 @@
     };
 
     function infoTemplate(auction) {
-      return '<h1>$' + auction.winning_bid.amount + '</h1>' +
+      return '<h1>$' + auction.bids[0].amount + '</h1>' +
              '<a target="_blank" href="https://micropurchase.18f.gov/auctions/' + auction.id +'">'  +
                auction.title +
              '</a>';
