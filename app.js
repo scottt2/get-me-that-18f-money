@@ -124,10 +124,11 @@ function eachSocket(handle, payload) {
   }
 }
 
-function setCurrentBid(bid, callback) {
+function setCurrentBid(bid) {
   fs.writeFile(lastBidFile, JSON.stringify({ bid: bid }), function(err) {
-    if(err) { return callback(true, err); }
-    return callback(null, bid);
+    if (err) { log('Error while saving!' + res); }
+    log('Setting currentBid to $' + res);
+    currentBid = bid;
   });
 }
 
@@ -198,11 +199,8 @@ setInterval( function() {
             if (err) { eachSocket('error', { payload: err }); }
             else {
               log('Winning with $' + bid);
-              currentBid = setCurrentBid(bid, function(err, res) {
-                if (err) { log('Error while saving!' + res); }
-                log('Setting currentBid to $' + res);
-                return res;
-              });
+              setCurrentBid(bid);
+
               eachSocket('status', {
                 payload: {
                   auction: res.auction,
