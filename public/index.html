@@ -87,9 +87,11 @@
     }
 
     function updateInfo(data) {
+      var status = (data.winning) ? 'winning' : 'losing';
       ui.info.innerHTML    = infoTemplate(data.auction);
       ui.status.innerHTML  = 'Connected';
-      ui.body.classList    = (data.winning) ? 'winning' : 'losing';
+      ui.body.classList    = status;
+      document.title       = '18fer | ' + data.auction.id + ' | ' + status[0].toUpperCase();
     }
 
     function updateError(error) {
