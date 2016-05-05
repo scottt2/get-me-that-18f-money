@@ -87,7 +87,7 @@
     }
 
     function updateInfo(data) {
-      var status = (data.winning) ? 'winning' : 'losing';
+      var status           = (data.winning) ? 'winning' : 'losing';
       ui.info.innerHTML    = infoTemplate(data.auction);
       ui.status.innerHTML  = 'Connected';
       ui.body.classList    = status;
