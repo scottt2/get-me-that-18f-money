@@ -43,33 +43,18 @@ io.on('connection', function(socket) {
 
 function timeStamp() {
   // https://gist.github.com/hurjas/2660489
-  // Create a date object with the current time
-    var now = new Date();
-
-  // Create an array with the current month, day and time
-    var date = [ now.getMonth() + 1, now.getDate(), now.getFullYear() ];
-
-  // Create an array with the current hour, minute and second
-    var time = [ now.getHours(), now.getMinutes(), now.getSeconds() ];
-
-  // Determine AM or PM suffix based on the hour
-    var suffix = ( time[0] < 12 ) ? "AM" : "PM";
-
-  // Convert hour from military time
-    time[0] = ( time[0] < 12 ) ? time[0] : time[0] - 12;
-
-  // If hour is 0, set it to 12
-    time[0] = time[0] || 12;
-
-  // If seconds and minutes are less than 10, add a zero
-    for ( var i = 1; i < 3; i++ ) {
-      if ( time[i] < 10 ) {
-        time[i] = "0" + time[i];
-      }
+  var now = new Date();
+  var date = [ now.getMonth() + 1, now.getDate(), now.getFullYear() ];
+  var time = [ now.getHours(), now.getMinutes(), now.getSeconds() ];
+  var suffix = ( time[0] < 12 ) ? "AM" : "PM";
+  time[0] = ( time[0] < 12 ) ? time[0] : time[0] - 12;
+  time[0] = time[0] || 12;
+  for ( var i = 1; i < 3; i++ ) {
+    if ( time[i] < 10 ) {
+      time[i] = "0" + time[i];
     }
-
-  // Return the formatted string
-    return date.join("/") + " " + time.join(":") + " " + suffix;
+  }
+  return date.join("/") + " " + time.join(":") + " " + suffix;
 }
 
 function log(msg) {
@@ -126,8 +111,8 @@ function eachSocket(handle, payload) {
 
 function setCurrentBid(bid) {
   fs.writeFile(lastBidFile, JSON.stringify({ bid: bid }), function(err) {
-    if (err) { log('Error while saving!' + res); }
-    log('Setting currentBid to $' + res);
+    if (err) { log('Error while saving!' + err); }
+    log('Setting currentBid to $' + bid);
     currentBid = bid;
   });
 }
@@ -158,7 +143,7 @@ setInterval( function() {
             res.auction.bids[0].bidder_id !== undefined) &&
             res.auction.bids[0].bidder_id === userID) {
 
-          log('Currently winning with ' + currentBid);
+          log('Currently winning with $' + currentBid);
           eachSocket('status', {
             payload: {
               auction: res.auction,
